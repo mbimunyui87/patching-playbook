@@ -1,0 +1,29 @@
+---
+- name: Ensure the system is registered with Red Hat Subscription Manager
+  command: subscription-manager register --username={{ rhsm_username }} --password={{ rhsm_password }}
+  when: ansible_distribution == "RedHat"
+  register: rhsm_register
+  ignore_errors: yes
+
+- name: Attach to a subscription pool
+  command: subscription-manager attach --auto
+  when: rhsm_register is succeeded
+
+- name: Update all packages to the latest version
+  yum:
+    name: '*'
+    state: latest
+
+- name: Reboot the server if needed
+  reboot:
+    msg: "Reboot initiated by Ansible for package updates"
+    connect_timeout: 5
+    reboot_timeout: 600
+    pre_reboot_delay: 5
+    post_reboot_delay: 30
+  when: "'No packages marked for update' not in result.stdout"
+
+- name: Ensure system is up-to-date
+  yum:
+    name: '*'
+    state: latest

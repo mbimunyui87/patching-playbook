@@ -1,0 +1,6 @@
+---
+- name: Patch Red Hat servers
+  hosts: redhat
+  become: true
+  roles:
+    - patch_redhat
