@@ -4,7 +4,7 @@
   become: yes
   tasks:
     - name: Ensure the system is registered with Red Hat Subscription Manager
-      command: subscription-manager register --username={{ rhsm_username }} --password={{ rhsm_password }}
+      command: subscription-manager register --username= "mbimunyui87@yahoo.com" --password="Patou1987*"
       when: ansible_distribution == "RedHat"
       register: rhsm_register
       ignore_errors: yes
